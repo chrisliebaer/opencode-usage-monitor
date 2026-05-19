@@ -86,7 +86,7 @@ function renderUsagePanel(
   const marker = config.symbols === "ascii" ? (collapsed ? ">" : "v") : (collapsed ? "▶" : "▼");
   const right = buildHeaderRight(providerStates);
   const headerLine = formatHeaderLine(`${marker} Usage`, right, width);
-  const header = box({ width: "100%", onMouseDown: onToggle }, [renderText(headerLine, theme.accent)]);
+  const header = box({ width: "100%", onMouseDown: onToggle }, [renderText(headerLine, theme.text)]);
 
   if (collapsed) return renderPanel([header]);
 

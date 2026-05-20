@@ -19,6 +19,7 @@ export const CONFIG_DEFAULTS: Required<UsageMonitorConfig> = {
   max_detail_lines: 4,
   max_windows: 3,
   max_model_lines: 1,
+  refresh_keybind: "<leader>q",
 };
 
 export function mergeUsageConfig(partial: UsageMonitorConfig): Required<UsageMonitorConfig> {
@@ -49,7 +50,7 @@ export async function readUsageConfig(): Promise<UsageMonitorConfig> {
 
 export function parseUsageConfig(raw: Record<string, unknown>): UsageMonitorConfig {
   const { enabled, default_collapsed, refresh_ms, request_timeout_ms, show_openai, show_zai } = raw;
-  const { show_details, default_provider_collapsed, debug, width, symbols, max_detail_lines, max_windows, max_model_lines } = raw;
+  const { show_details, default_provider_collapsed, debug, width, symbols, max_detail_lines, max_windows, max_model_lines, refresh_keybind } = raw;
   return {
     ...(typeof enabled === "boolean" ? { enabled } : {}),
     ...(typeof default_collapsed === "boolean" ? { default_collapsed } : {}),
@@ -65,6 +66,7 @@ export function parseUsageConfig(raw: Record<string, unknown>): UsageMonitorConf
     ...(typeof max_detail_lines === "number" ? { max_detail_lines } : {}),
     ...(typeof max_windows === "number" ? { max_windows } : {}),
     ...(typeof max_model_lines === "number" ? { max_model_lines } : {}),
+    ...(typeof refresh_keybind === "string" && refresh_keybind.length > 0 ? { refresh_keybind } : {}),
   };
 }
 

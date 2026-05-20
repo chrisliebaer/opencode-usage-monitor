@@ -97,6 +97,7 @@ export type UsageMonitorConfig = {
   max_detail_lines?: number;
   max_windows?: number;
   max_model_lines?: number;
+  refresh_keybind?: string;
 };
 
 export type RefreshGuard = {

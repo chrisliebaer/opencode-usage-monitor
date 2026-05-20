@@ -351,7 +351,7 @@ const plugin: TuiPluginModule & { id: string } = {
       value: "usage-monitor:refresh",
       description: "Force refresh usage data from all providers",
       category: "usage-monitor",
-      keybind: "shift+r",
+      keybind: getConfig().refresh_keybind,
       slash: { name: "usage-refresh" },
       onSelect: async (_dialog) => {
         try {

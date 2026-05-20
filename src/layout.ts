@@ -120,18 +120,6 @@ export function formatMetricLine(label: string, value: string, labelWidth: numbe
   return truncateSmart(`    ${safeLabel}  ${sanitizeLine(value)}`, totalWidth);
 }
 
-export function splitMetricValue(fullValue: string): { main: string; suffix?: string } {
-  const dotIndex = fullValue.indexOf(" · ");
-  if (dotIndex === -1) return { main: fullValue };
-
-  const potentialSuffix = fullValue.slice(dotIndex + 3);
-  if (potentialSuffix.startsWith("reset ")) {
-    return { main: fullValue.slice(0, dotIndex), suffix: potentialSuffix };
-  }
-
-  return { main: fullValue };
-}
-
 /** Select top N metrics by priority for compact display */
 export function selectCompactMetrics(metrics: UsageMetric[], maxCount: number): UsageMetric[] {
   return [...metrics]

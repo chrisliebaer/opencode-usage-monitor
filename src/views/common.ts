@@ -1,5 +1,5 @@
 import type { StandardUsageProvider, StandardUsageWindow } from "../providers/types.js";
-import { formatPercent, formatReset, formatTokens, splitMetricValue } from "../layout.js";
+import { formatPercent, formatReset, formatTokens } from "../layout.js";
 import { getWindowSeverity } from "../severity.js";
 import type { ProviderUsageView, UsageMetric, UsageTone } from "./types.js";
 
@@ -43,6 +43,18 @@ export function windowValue(window: StandardUsageWindow): string {
   const suffix = [window.resetLabel ?? formatReset(window.resetAt)]
     .filter((part): part is string => part !== undefined && part.length > 0);
   return [main, ...suffix].join(" · ");
+}
+
+export function splitMetricValue(fullValue: string): { main: string; suffix?: string } {
+  const dotIndex = fullValue.indexOf(" · ");
+  if (dotIndex === -1) return { main: fullValue };
+
+  const potentialSuffix = fullValue.slice(dotIndex + 3);
+  if (potentialSuffix.startsWith("reset ")) {
+    return { main: fullValue.slice(0, dotIndex), suffix: potentialSuffix };
+  }
+
+  return { main: fullValue };
 }
 
 export function metricSummary(metrics: UsageMetric[], maxCount = 2): string | undefined {

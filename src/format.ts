@@ -1,5 +1,6 @@
 import type { UsageMonitorConfig, UsageSeverity } from "./providers/types.js";
-import { formatAge, formatHeaderLine, formatMetricLine, formatProviderTitleLine, metricLabelWidth, splitMetricValue, toneToSeverity, truncateTo } from "./layout.js";
+import { formatAge, formatHeaderLine, formatMetricLine, formatProviderTitleLine, metricLabelWidth, toneToSeverity, truncateTo } from "./layout.js";
+import { splitMetricValue } from "./views/common.js";
 import type { ProviderUsageView, UsageMetric } from "./views/types.js";
 
 export type FormattedLine = { text: string; severity: UsageSeverity; suffix?: string };

@@ -61,7 +61,8 @@ The plugin reads a dedicated configuration file first:
   "symbols": "unicode",
   "max_detail_lines": 4,
   "max_windows": 3,
-  "max_model_lines": 1
+  "max_model_lines": 1,
+  "refresh_keybind": "<leader>q>"
 }
 ```
 
@@ -89,7 +90,8 @@ Alternatively, add a `usage_monitor` section to `oh-my-openagent.json`:
     "symbols": "unicode",
     "max_detail_lines": 4,
     "max_windows": 3,
-    "max_model_lines": 1
+    "max_model_lines": 1,
+    "refresh_keybind": "<leader>q>"
   }
 }
 ```
@@ -127,7 +129,7 @@ Provider-level detail views can be toggled collapsed/expanded independently of t
 
 - Click the main usage header to collapse/expand the entire panel
 - Click individual provider rows to toggle provider details (OpenAI has primary + secondary windows, providers can be toggled collapsed/expanded)
-- Use `/usage-refresh` slash command or press `shift+r` to manually refresh
+- Use `/usage-refresh` slash command or press the configured refresh keybind (default: `<leader>q>`) to manually refresh
 - Cache is stored at `~/.cache/opencode/usage-monitor.json`
 - Render errors are caught and displayed safely within an error boundary
 
@@ -193,7 +195,11 @@ Available scripts:
 
 ## Screenshots
 
-<!-- TODO: add screenshot -->
+![Collapsed view](assets/sidebar-collapsed.png)
+
+![Provider expanded](assets/provider-expanded.png)
+
+![Fully expanded](assets/fully-expanded.png)
 
 ## License
 

@@ -1,8 +1,6 @@
 # opencode-usage-monitor
 
-[![Bun](https://img.shields.io/badge/bun-%3E%3D1.1.0-black)](https://bun.sh/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Powered by OpenCode](https://img.shields.io/badge/powered%20by-OpenCode-black)](https://opencode.ai/)
+[![npm version](https://img.shields.io/npm/v/opencode-usage-monitor?labelColor=black&style=flat-square)](https://www.npmjs.com/package/opencode-usage-monitor) [![license](https://img.shields.io/badge/license-MIT-black?style=flat-square)](./LICENSE) [![Bun](https://img.shields.io/badge/bun-%3E%3D1.1.0-black)](https://bun.sh/) [![Powered by OpenCode](https://img.shields.io/badge/powered%20by-OpenCode-black)](https://opencode.ai/)
 
 OpenCode TUI sidebar plugin that displays API usage quotas for OpenAI and Z.AI (GLM) providers.
 
@@ -23,10 +21,10 @@ OpenCode TUI sidebar plugin that displays API usage quotas for OpenAI and Z.AI (
 
 ## Installation
 
-### npm package
+### bun package
 
 ```bash
-npm install opencode-usage-monitor
+bun add opencode-usage-monitor
 ```
 
 Register the package in your OpenCode plugin configuration according to your OpenCode setup.

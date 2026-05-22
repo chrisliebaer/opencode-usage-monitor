@@ -26,6 +26,8 @@ bun run typecheck
 ### Code style
 
 - Follow existing patterns and conventions.
+- No `as any`, `@ts-ignore`, or `@ts-expect-error`.
+- File names use kebab-case (e.g., `openai-view.ts`).
 - Use immutable data structures and avoid mutating existing objects.
 - Keep functions small and focused.
 - Keep files cohesive and below 800 lines.
@@ -148,6 +150,10 @@ Then test the built plugin with your local OpenCode setup. Keep local configurat
 ## Release process
 
 Maintainers handle releases. The `prepublishOnly` script builds the plugin before publishing.
+
+## Language
+
+Use English for all code comments, commit messages, issues, and pull request descriptions.
 
 ## License
 

@@ -1,48 +1,111 @@
 # opencode-usage-monitor
 
-[![npm version](https://img.shields.io/npm/v/opencode-usage-monitor?labelColor=black&style=flat-square)](https://www.npmjs.com/package/opencode-usage-monitor) [![license](https://img.shields.io/badge/license-MIT-black?style=flat-square)](./LICENSE) [![Bun](https://img.shields.io/badge/bun-%3E%3D1.1.0-black)](https://bun.sh/) [![Powered by OpenCode](https://img.shields.io/badge/powered%20by-OpenCode-black)](https://opencode.ai/)
+> OpenCode TUI sidebar plugin that shows OpenAI and Z.AI / GLM quota usage without exposing provider credentials in the UI.
 
-OpenCode TUI sidebar plugin that displays API usage quotas for OpenAI and Z.AI (GLM) providers.
+[![Package](https://img.shields.io/badge/npm-opencode--usage--monitor-111827?style=for-the-badge&labelColor=111827&color=5b5ef4)](https://www.npmjs.com/package/opencode-usage-monitor)
+![Runtime](https://img.shields.io/badge/runtime-Bun-111827?style=for-the-badge&logo=bun&logoColor=5b5ef4)
+![Host](https://img.shields.io/badge/host-OpenCode-111827?style=for-the-badge&labelColor=111827&color=5b5ef4)
+![License](https://img.shields.io/badge/license-MIT-111827?style=for-the-badge&labelColor=111827&color=5b5ef4)
 
-## Features
+| Field | Value |
+|---|---|
+| Status | Actively maintained personal OpenCode tool/plugin |
+| Type | OpenCode TUI plugin / host extension |
+| Host app | OpenCode `>= v1.14.49` documented; `@opencode-ai/plugin >=1.4.0` peer dependency |
+| Package | `opencode-usage-monitor` `1.0.7`, published on npm |
+| Runtime | Bun `>= 1.1.0` documented for local development |
+| Maintainer checks | `bun install && bun run build:all && bun test && bun run typecheck` |
 
-- Displays OpenAI daily cost, token, and request usage in the OpenCode sidebar.
-- Displays Z.AI and GLM quota status, reset timing, and plan information.
-- Discovers credentials from OpenCode auth storage and environment variables.
-- Supports dedicated plugin configuration and `oh-my-openagent.json` integration.
+## Screenshots
+
+The plugin renders inside the OpenCode terminal UI sidebar.
+
+![Collapsed sidebar view](assets/sidebar-collapsed.png)
+
+![Provider expanded view](assets/provider-expanded.png)
+
+![Fully expanded view](assets/fully-expanded.png)
+
+## Summary
+
+- Displays OpenAI ChatGPT usage windows such as 5h/week with reset timing and optional plan or credits details.
+- Displays Z.AI and GLM 5h/day/month quota windows with reset timing and optional plan details.
+- Discovers credentials from OpenCode auth storage and supported environment variables.
 - Redacts secrets from error messages before rendering them in the TUI.
 - Uses stale-data indicators and guarded refreshes to avoid overlapping API calls.
-- Features two-level toggle: main panel collapse/expand and provider-level detail views.
+- Supports two-level collapse/expand behavior: the full panel and per-provider detail views.
 
-## Requirements
+## Quick start
 
-- OpenCode >= v1.14.49
-- Bun >= 1.1.0
+```sh
+# install the published OpenCode plugin globally
+opencode plugin opencode-usage-monitor@latest --global --force
 
-## Installation
-
-### bun package
-
-```bash
-bun add opencode-usage-monitor
-```
-
-Register the package in your OpenCode plugin configuration according to your OpenCode setup.
-
-### Local checkout
-
-```bash
+# optional: build from a local checkout for development
 git clone https://github.com/Mark1708/opencode-usage-monitor.git
-cd usage-monitor
+cd opencode-usage-monitor
 bun install
 bun run build:all
 ```
 
-Then point OpenCode to the built `dist/index.js` plugin entry.
+## Installation
+
+### OpenCode plugin install
+
+```sh
+opencode plugin opencode-usage-monitor@latest --global --force
+```
+
+This is the recommended path for users because the plugin is published on npm and OpenCode can install it directly.
+
+### Package install for local development
+
+```sh
+bun add opencode-usage-monitor
+```
+
+Use this when you need the package in a local development workspace rather than installing it into OpenCode globally.
+
+### Local checkout
+
+```sh
+git clone https://github.com/Mark1708/opencode-usage-monitor.git
+cd opencode-usage-monitor
+bun install
+bun run build:all
+```
+
+The build emits the plugin entry and TUI bundle into `dist/`.
+
+## Compatibility
+
+| Component | Supported version | Source |
+|---|---|---|
+| Host app | OpenCode `>= v1.14.49` | README compatibility note |
+| Plugin API | `@opencode-ai/plugin >=1.4.0` | `package.json` peer dependency |
+| TUI runtime | `@opentui/solid >=0.1.0`, `solid-js >=1.8.0` | `package.json` peer dependencies |
+| Local runtime | Bun `>=1.1.0` | README requirements; Bun-based scripts in `package.json` |
+| TypeScript | `^5.5.0` | `package.json` dev dependency |
 
 ## Configuration
 
-The plugin reads a dedicated configuration file first:
+The plugin first reads a dedicated config file:
+
+```text
+~/.config/opencode/usage-monitor.json
+```
+
+Smallest useful configuration:
+
+```json
+{
+  "enabled": true,
+  "show_openai": true,
+  "show_zai": true
+}
+```
+
+Full documented shape:
 
 ```json
 {
@@ -60,125 +123,60 @@ The plugin reads a dedicated configuration file first:
   "max_detail_lines": 4,
   "max_windows": 3,
   "max_model_lines": 1,
-  "refresh_keybind": "<leader>q>"
+  "refresh_keybind": "<leader>q"
 }
 ```
 
-Save it at:
+Alternatively, add a `usage_monitor` section to `oh-my-openagent.json`. Dedicated `usage-monitor.json` values take precedence.
 
-```text
-~/.config/opencode/usage-monitor.json
-```
-
-Alternatively, add a `usage_monitor` section to `oh-my-openagent.json`:
-
-```json
-{
-  "usage_monitor": {
-    "enabled": true,
-    "default_collapsed": false,
-    "default_provider_collapsed": true,
-    "debug": false,
-    "refresh_ms": 60000,
-    "request_timeout_ms": 15000,
-    "show_openai": true,
-    "show_zai": true,
-    "show_details": true,
-    "width": 34,
-    "symbols": "unicode",
-    "max_detail_lines": 4,
-    "max_windows": 3,
-    "max_model_lines": 1,
-    "refresh_keybind": "<leader>q>"
-  }
-}
-```
-
-Dedicated `usage-monitor.json` values take precedence over `oh-my-openagent.json` values.
-
-## Supported providers
+## Credentials
 
 ### OpenAI
 
-OpenAI usage and cost endpoints require an admin key. Set one of the following:
+OpenAI organization usage endpoints require an admin key:
 
-```bash
+```sh
 export OPENAI_ADMIN_KEY="your-admin-key"
 ```
 
-The plugin can detect `OPENAI_API_KEY` or an OpenCode `auth.json` OpenAI entry, but those credentials are marked unsupported for organization usage endpoints unless they are admin keys.
-
-Features two-level toggle: main panel collapse/expand and provider-level detail views. OpenAI displays primary + secondary windows with rate limits.
+The plugin can detect `OPENAI_API_KEY` or an OpenCode `auth.json` OpenAI entry, but non-admin credentials are marked unsupported for organization usage endpoints.
 
 ### Z.AI and GLM
 
-The plugin supports Z.AI and Zhipu/GLM credentials from OpenCode auth storage or environment variables:
+The plugin supports Z.AI and Zhipu / GLM credentials from OpenCode auth storage or environment variables:
 
-```bash
+```sh
 export ZAI_API_KEY="your-zai-key"
 export ZAI_CODING_PLAN_API_KEY="your-coding-plan-key"
 export ZHIPU_API_KEY="your-zhipu-key"
 export ZHIPUAI_API_KEY="your-zhipuai-key"
 ```
 
-Provider-level detail views can be toggled collapsed/expanded independently of the main panel state.
-
 ## Usage
 
-- Click the main usage header to collapse/expand the entire panel
-- Click individual provider rows to toggle provider details (OpenAI has primary + secondary windows, providers can be toggled collapsed/expanded)
-- Use `/usage-refresh` slash command or press the configured refresh keybind (default: `<leader>q>`) to manually refresh
-- Cache is stored at `~/.cache/opencode/usage-monitor.json`
-- Render errors are caught and displayed safely within an error boundary
-
-## Development
-
-```bash
-bun install
-bun run build:all
-bun test
-bun run typecheck
-```
-
-Available scripts:
-
-- `bun run build:index` builds the OpenCode plugin entry.
-- `bun run build` builds the TUI module.
-- `bun run build:all` builds both outputs into `dist/`.
-- `bun test` runs the test suite.
-- `bun run typecheck` runs TypeScript validation without emitting files.
+- Click the main usage header to collapse or expand the full panel.
+- Click provider rows to toggle provider details independently.
+- Use `/usage-refresh` or the configured refresh keybind, default `<leader>q`, to refresh manually.
+- Cache is stored at `~/.cache/opencode/usage-monitor.json`.
+- Render errors are caught and displayed inside an error boundary.
 
 ## Project structure
 
 ```text
 .
+├── assets/                    # Local screenshots used by this README
+├── dist/                      # Built package output
 ├── src/
-│   ├── auth.ts
-│   ├── cache.ts
-│   ├── config.ts
-│   ├── format.ts
-│   ├── index.ts
-│   ├── layout.ts
-│   ├── sanitize.ts
-│   ├── severity.ts
-│   ├── tui.test.ts
-│   ├── tui.ts
-│   ├── providers/
-│   │   ├── openai.ts
-│   │   ├── registry.ts
-│   │   ├── shared.ts
-│   │   ├── types.ts
-│   │   └── zai.ts
-│   └── views/
-│       ├── common.ts
-│       ├── index.ts
-│       ├── openai-view.ts
-│       ├── types.ts
-│       └── zai-view.ts
-├── package.json
-├── tsconfig.json
-├── README.md
-├── CONTRIBUTING.md
+│   ├── auth.ts                # OpenCode auth and environment credential discovery
+│   ├── cache.ts               # Usage cache persistence
+│   ├── config.ts              # usage-monitor.json and oh-my-openagent config parsing
+│   ├── index.ts               # OpenCode plugin entry
+│   ├── sanitize.ts            # Secret redaction helpers
+│   ├── tui.ts                 # TUI plugin module
+│   ├── providers/             # OpenAI and Z.AI provider clients
+│   └── views/                 # TUI view rendering helpers
+├── package.json               # Package metadata, scripts, peer dependencies
+├── tsconfig.json              # Strict TypeScript config
 └── LICENSE
 ```
 
@@ -187,18 +185,24 @@ Available scripts:
 - If OpenAI shows `needs admin key`, set `OPENAI_ADMIN_KEY` with an organization admin key.
 - If Z.AI shows `auth missing`, configure a supported Z.AI or Zhipu environment variable or OpenCode auth entry.
 - If the panel is too wide or narrow, adjust `width` in `usage-monitor.json`.
-- If refreshes appear stale, lower `refresh_ms` or check network access to provider APIs.
+- If refreshes appear stale, lower `refresh_ms` or check provider API connectivity.
 - If build output is missing, run `bun run build:all` and verify `dist/index.js` and `dist/tui.js` exist.
-- If data appears stale, check cache location at `~/.cache/opencode/usage-monitor.json`.
+- If cached data appears stale, check `~/.cache/opencode/usage-monitor.json`.
 
-## Screenshots
+## Limitations / Security
 
-![Collapsed view](assets/sidebar-collapsed.png)
+- The plugin reads local OpenCode auth metadata and supported environment variables, but examples in this README use placeholders only.
+- Secrets are redacted from rendered error messages before they reach the TUI.
+- Provider data depends on external OpenAI, Z.AI, and Zhipu API availability and credential permissions.
+- The package is a host extension; runtime behavior depends on compatible OpenCode and OpenTUI APIs.
 
-![Provider expanded](assets/provider-expanded.png)
+## Status
 
-![Fully expanded](assets/fully-expanded.png)
+Actively maintained personal OpenCode tool/plugin. Public issues and improvements are welcome, but the project is primarily maintained around the author's own workflow.
 
-## License
+## Links / License
 
-MIT. See [LICENSE](LICENSE).
+- Package: <https://www.npmjs.com/package/opencode-usage-monitor>
+- Repository: <https://github.com/Mark1708/opencode-usage-monitor>
+- Host app: <https://opencode.ai/>
+- License: MIT, see [`LICENSE`](LICENSE)

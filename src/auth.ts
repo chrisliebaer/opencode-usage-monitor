@@ -1,6 +1,7 @@
+import { homedir } from "node:os";
 import type { AuthEntry, AuthJson, AuthState } from "./providers/types.js";
 
-const HOME = process.env.HOME ?? "";
+const HOME = homedir() ?? "";
 const AUTH_PATH = `${HOME}/.local/share/opencode/auth.json`;
 
 function shortError(error: unknown): string {

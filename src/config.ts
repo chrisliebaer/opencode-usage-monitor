@@ -1,6 +1,7 @@
+import { homedir } from "node:os";
 import type { UsageMonitorConfig } from "./providers/types.js";
 
-const HOME = process.env.HOME ?? "";
+const HOME = homedir() ?? "";
 export const CONFIG_PATH = `${HOME}/.config/opencode/usage-monitor.json`;
 export const OMO_CONFIG_PATH = `${HOME}/.config/opencode/oh-my-openagent.json`;
 
